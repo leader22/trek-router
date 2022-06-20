@@ -1,9 +1,9 @@
 const _ = require('lodash')
 const assert = require('assert')
 const Benchmark = require('benchmark')
-const pathToRegexp = require('path-to-regexp')
+const { pathToRegexp } = require('path-to-regexp')
 const RouteRecognizer = require('route-recognizer')
-const RouteTrie = require('route-trie')
+const RouteTrie = require('route-trie').default
 const Routington = require('routington')
 const wayfarer = require('wayfarer')
 const Router = require('../')

@@ -542,7 +542,7 @@ describe('Router', () => {
 
       request(server)
         .get('/233')
-        .expect(200, [{value: 233, name: "anyway"}], done)
+        .expect(200, [{value: '233', name: "anyway"}], done)
     })
 
   })

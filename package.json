@@ -19,27 +19,27 @@
   "main": "index.js",
   "scripts": {
     "bench": "node benchmarks",
-    "test": "mocha --compilers js:babel-core/register --reporter spec --bail --check-leaks test/**/*.test.js",
+    "test": "mocha --require babel-core/register --reporter spec --bail --check-leaks test/**/*.test.js",
     "test-ci": "babel-node node_modules/.bin/isparta cover node_modules/.bin/_mocha --report lcovonly --  --reporter spec --check-leaks test/**/*.test.js",
     "test-cov": "babel-node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/**/*.test.js"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "6.26.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "6.26.2",
     "babel-plugin-transform-export-extensions": "6",
     "babel-preset-es2016": "6.24.1",
     "benchmark": "2.1.4",
-    "finalhandler": "1.1.0",
+    "finalhandler": "1.2.0",
     "isparta": "4",
     "lodash": "4",
-    "mocha": "4.0.1",
-    "path-to-regexp": "2.0.0",
-    "power-assert": "1.4.4",
-    "route-recognizer": "0.3.3",
-    "route-trie": "2.2.2",
+    "mocha": "10.0.0",
+    "path-to-regexp": "6.2.1",
+    "power-assert": "1.6.1",
+    "route-recognizer": "0.3.4",
+    "route-trie": "3.0.0",
     "routington": "1",
-    "supertest": "3",
-    "wayfarer": "6.6.2"
+    "supertest": "6",
+    "wayfarer": "7.0.1"
   },
   "engines": {
     "node": ">= 6"

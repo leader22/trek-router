@@ -3,6 +3,17 @@ import finalhandler from "finalhandler";
 import request from "supertest";
 import { Router } from "../index.js";
 
+const createServer = (router) =>
+  http.createServer((req, res) => {
+    const [handler, params] = router.find(req.method, req.url);
+    if (handler) {
+      req.params = params;
+      return handler(req, res);
+    }
+
+    finalhandler(req, res);
+  });
+
 describe("HTTP Server", () => {
   let r;
   beforeEach(() => {
@@ -10,7 +21,11 @@ describe("HTTP Server", () => {
   });
 
   it("should be used for http server", (done) => {
-    r.add("GET", "/", helloWorld);
+    r.add("GET", "/", (_, res) => {
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "text/plain");
+      res.end("hello, world");
+    });
 
     let server = createServer(r);
 
@@ -18,7 +33,11 @@ describe("HTTP Server", () => {
   });
 
   it("should return params", (done) => {
-    r.add("GET", "/:anyway", sawParams);
+    r.add("GET", "/:anyway", (req, res) => {
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify(req.params));
+    });
 
     let server = createServer(r);
 
@@ -27,26 +46,3 @@ describe("HTTP Server", () => {
       .expect(200, [{ value: "233", name: "anyway" }], done);
   });
 });
-
-function createServer(router) {
-  return http.createServer(function onRequest(req, res) {
-    var result = router.find(req.method, req.url);
-    if (result) {
-      req.params = result[1];
-      return result[0](req, res);
-    }
-    finalhandler(req, res);
-  });
-}
-
-function helloWorld(_req, res) {
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "text/plain");
-  res.end("hello, world");
-}
-
-function sawParams(req, res) {
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "application/json");
-  res.end(JSON.stringify(req.params));
-}

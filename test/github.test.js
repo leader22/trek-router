@@ -1,14 +1,9 @@
 import assert from "power-assert";
 import api from "../fixtures/github-api.js";
 import { Router } from "../index.js";
-import { shuffle, camelCase, printTree } from "./utils.js";
+import { createFunc, shuffle, camelCase, printTree } from "./utils.js";
 
 const funcPrefix = "github-api";
-
-function createFunc(name) {
-  var a = `(function ${name || ""}(){})`;
-  return eval(a);
-}
 
 describe("GitHub API", () => {
   let r;

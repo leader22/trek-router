@@ -1,7 +1,7 @@
 // Google+
 // https://developers.google.com/+/api/latest/
 // (in reality this is just a subset of a much larger API)
-module.exports = [
+export default [
   // People
   ['GET', '/people/:userId', '/people/233'],
   ['GET', '/people', '/people'],

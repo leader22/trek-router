@@ -1,5 +1,5 @@
 // https://github.com/discourse/discourse/blob/master/config/routes.rb
-module.exports = [
+export default [
   ['/404', '/404'],
 
   ['/site', '/site'],

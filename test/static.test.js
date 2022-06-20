@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import assert from 'power-assert'
-import Router from '..'
-import './node'
+import { Router } from '../index.js'
+import './node.js'
 
 function createFunc(name) {
   var a = `(function ${name||''}(){})`
@@ -174,7 +174,7 @@ const api = [
 let funcPrefx = 'static-api'
 
 describe('Router', () => {
-  let r, result
+  let r
   beforeEach(() => {
     r = new Router()
     _.shuffle(api).forEach((i) => {

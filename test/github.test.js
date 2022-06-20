@@ -1,9 +1,9 @@
 import _ from 'lodash'
 import assert from 'power-assert'
-import Router from '..'
-import './node'
+import api from './fixtures/github-api.js'
+import { Router } from '../index.js'
+import './node.js'
 
-const api = require('./fixtures/github-api')
 const funcPrefix = 'github-api'
 
 function createFunc(name) {

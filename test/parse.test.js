@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import assert from 'power-assert'
-import api from './fixtures/parse-api'
-import Router from '..'
-import './node'
+import api from './fixtures/parse-api.js'
+import { Router } from '../index.js'
+import './node.js'
 
 function createFunc(name) {
   var a = `(function ${name||''}(){})`

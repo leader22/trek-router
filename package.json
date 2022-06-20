@@ -3,11 +3,6 @@
   "version": "1.2.0",
   "description": "A fast HTTP router",
   "repository": "trekjs/router",
-  "author": {
-    "name": "Fangdun Cai",
-    "email": "cfddream@gmail.com",
-    "url": "fundon.me"
-  },
   "license": "MIT",
   "keywords": [
     "route",
@@ -17,17 +12,15 @@
     "trek-router"
   ],
   "main": "index.js",
+  "module": "index.js",
+  "type": "module",
   "scripts": {
     "bench": "node benchmarks",
-    "test": "mocha --require babel-core/register --reporter spec --bail --check-leaks test/**/*.test.js",
-    "test-ci": "babel-node node_modules/.bin/isparta cover node_modules/.bin/_mocha --report lcovonly --  --reporter spec --check-leaks test/**/*.test.js",
-    "test-cov": "babel-node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/**/*.test.js"
+    "test": "mocha --reporter spec --bail --check-leaks test/**/*.test.js",
+    "test-ci": "node node_modules/.bin/isparta cover node_modules/.bin/_mocha --report lcovonly --  --reporter spec --check-leaks test/**/*.test.js",
+    "test-cov": "node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/**/*.test.js"
   },
   "devDependencies": {
-    "babel-cli": "6.26.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "6.26.2",
-    "babel-plugin-transform-export-extensions": "6",
-    "babel-preset-es2016": "6.24.1",
     "benchmark": "2.1.4",
     "finalhandler": "1.2.0",
     "isparta": "4",
@@ -48,14 +41,5 @@
     "HISTORY.md",
     "LICENSE",
     "index.js"
-  ],
-  "babel": {
-    "plugins": [
-      "transform-es2015-modules-commonjs",
-      "transform-export-extensions"
-    ],
-    "presets": [
-      "es2016"
-    ]
-  }
+  ]
 }

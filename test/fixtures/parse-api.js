@@ -1,6 +1,6 @@
 // Parse
 // https://parse.com/docs/rest#summary
-module.exports = [
+export default [
   // Objects
   ['POST', '/1/classes/:className', '/1/classes/3n2b'],
   ['GET', '/1/classes/:className/:objectId', '/1/classes/3n2b/233'],

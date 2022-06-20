@@ -3,8 +3,8 @@ import http from 'http'
 import assert from 'power-assert'
 import finalhandler from 'finalhandler'
 import request from 'supertest'
-import Router, { Node } from '..'
-import './node'
+import { Router } from '../index.js'
+import './node.js'
 
 function createFunc(name) {
   var a = `(function ${name||''}(){})`
@@ -498,7 +498,7 @@ describe('Router', () => {
   describe('Node', () => {
     let node
     beforeEach(() => {
-      node = new Node('/users')
+      node = new Router.Node('/users')
     })
 
     it('create a node', () => {
@@ -559,7 +559,7 @@ function createServer(router) {
   })
 }
 
-function helloWorld(req, res) {
+function helloWorld(_req, res) {
   res.statusCode = 200
   res.setHeader('Content-Type', 'text/plain')
   res.end('hello, world')

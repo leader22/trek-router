@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   // OAuth Authorizations
   ['GET', '/authorizations', '/authorizations'],
   ['GET', '/authorizations/:id', '/authorizations/233'],

@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import assert from 'power-assert'
-import api from './fixtures/gplus-api'
-import Router from '..'
-import './node'
+import api from './fixtures/gplus-api.js'
+import { Router } from '../index.js'
+import './node.js'
 
 const funcPrefix = 'gplus-api'
 

@@ -1,10 +1,10 @@
 import _ from 'lodash'
 import assert from 'power-assert'
-import Router, { Node } from '..'
-import './node'
+import { Router } from '../index.js'
+import './node.js'
 
 describe('Issue #9', () => {
-  let r, result
+  let r
   beforeEach(() => {
     r = new Router()
   })

@@ -63,7 +63,7 @@ class Node {
   }
 }
 
-class Router {
+export class Router {
   constructor() {
     this.tree = new Node()
   }
@@ -262,5 +262,3 @@ class Router {
 }
 
 Router.Node = Node
-
-module.exports = Router

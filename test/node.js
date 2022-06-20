@@ -1,11 +1,11 @@
 import { format } from 'util'
-import { Node } from '..'
+import { Router } from '../index.js'
 
 function prefix(tail, p, on, off) {
   return format('%s%s', p, tail ? on : off)
 }
 
-Node.prototype.printTree = function printTree(pfx, tail, method = 'GET') {
+Router.Node.prototype.printTree = function printTree(pfx, tail, method = 'GET') {
   let result = this.map[method]
   let handler = result && result.handler
   let p = prefix(tail, pfx, '└── ', '├── ')

@@ -1,5 +1,4 @@
-import _ from 'lodash'
-import assert from 'assert'
+import assert from 'power-assert'
 import Benchmark from 'benchmark'
 
 import { pathToRegexp } from 'path-to-regexp'
@@ -8,267 +7,185 @@ import RouteRecognizer from 'route-recognizer'
 // import RouteTrie from 'route-trie'
 import Routington from 'routington'
 import wayfarer from 'wayfarer'
-
 import { Router } from '../index.js'
-import api from '../test/fixtures/github-api.js'
-import api0 from '../test/fixtures/discourse-api.js'
 
-const suite = new Benchmark.Suite()
+import api from '../fixtures/github-api.js'
+import api0 from '../fixtures/discourse-api.js'
 
-var routes0 = new Router()
-api.forEach(function(i) {
-  var method = i[0],
-    path = i[1]
-  routes0.add(method, path, function() {})
-})
-var routes00 = new Router()
-api0.forEach(function(i) {
-  var method = 'GET',
-    path = i[0]
-  routes00.add(method, path, function() {})
-})
+const noop = async () => {}
 
-var routes1 = {}
-api.forEach(function(i) {
-  var keys = []
-  var method = i[0],
-    path = i[1]
-  var r = routes1[method] || (routes1[method] = [])
-  r.push(pathToRegexp(path, keys))
-})
-var routes10 = {}
-api0.forEach(function(i) {
-  var keys = []
-  var method = 'GET',
-    path = i[0]
-  var r = routes10[method] || (routes10[method] = [])
-  r.push(pathToRegexp(path, keys))
-})
+const routes0 = new Router()
+const routes1 = {}
+const routes2 = {}
+// const routes3 = {}
+const routes4 = {}
+const routes5 = {}
+for (const [method, path] of api) {
+  routes0.add(method, path, noop)
 
-var routes2 = {}
-api.forEach(function(i) {
-  var method = i[0],
-    path = i[1]
-  var r = routes2[method] || (routes2[method] = new RouteRecognizer())
-  r.add([
+  const keys = []
+  const r1 = routes1[method] || (routes1[method] = [])
+  r1.push(pathToRegexp(path, keys))
+
+  const r2 = routes2[method] || (routes2[method] = new RouteRecognizer())
+  r2.add([
     {
       path: path,
-      handler: function() {}
+      handler: noop
     }
   ])
-})
-var routes20 = {}
-api0.forEach(function(i) {
-  var method = 'GET',
-    path = i[0]
-  var r = routes20[method] || (routes20[method] = new RouteRecognizer())
-  r.add([
+
+  // const r3 = routes3[method] || (routes3[method] = new RouteTrie())
+  // r3.define(path)
+
+  const r4 = routes4[method] || (routes4[method] = new Routington())
+  r4.define(path)
+
+  const r5 = routes5[method] || (routes5[method] = wayfarer())
+  r5.on(path, noop)
+}
+
+console.log('==========================')
+console.log('GitHub API, %s routes', api.length)
+console.log('==========================')
+new Benchmark.Suite()
+  .add('trek-router', () => {
+    for (const [method, , realpath] of api) {
+      const [handler] = routes0.find(method, realpath)
+      assert.notEqual(null, handler)
+    }
+  })
+  .add('path-to-regexp', () => {
+    for (const [method, , realpath] of api) {
+      const r = routes1[method]
+      const [result] = r.filter((j) => j.exec(realpath))
+      assert.notEqual(null, result)
+    }
+  })
+  .add('route-recognizer', () => {
+    for (const [method, , realpath] of api) {
+      const r = routes2[method]
+      const result = r.recognize(realpath)
+      assert.notEqual(null, result)
+    }
+  })
+  // .add('route-trie', () => {
+  //   for (const [method, , realpath] of api) {
+  //     const r = routes3[method]
+  //     const result = r.match(realpath)
+  //     assert.notEqual(null, result)
+  //   }
+  // })
+  .add('routington', () => {
+    for (const [method, , realpath] of api) {
+      const r = routes4[method]
+      const result = r.match(realpath)
+      assert.notEqual(null, result)
+    }
+  })
+  .add('wayfarer', () => {
+    for (const [method, , realpath] of api) {
+      const r = routes5[method]
+      const result = r(realpath)
+      assert.notEqual(null, result)
+    }
+  })
+  .on('cycle', (ev) => {
+    console.log(String(ev.target))
+    console.log('memoryUsage:', process.memoryUsage())
+  })
+  .on('complete', (ev) => {
+    console.log('')
+    console.log('Fastets is', Benchmark.filter(ev.currentTarget, 'fastest')[0].name)
+    console.log('')
+  })
+  .run()
+
+// ====================================================================
+
+const routes00 = new Router()
+const routes10 = {}
+const routes20 = {}
+// const routes30 = {}
+const routes40 = {}
+const routes50 = {}
+for (const [method, path] of api0) {
+  routes00.add(method, path, noop)
+
+  const keys = []
+  const r1 = routes10[method] || (routes10[method] = [])
+  r1.push(pathToRegexp(path, keys))
+
+  const r2 = routes20[method] || (routes20[method] = new RouteRecognizer())
+  r2.add([
     {
       path: path,
-      handler: function() {}
+      handler: noop
     }
   ])
-})
 
-// var routes3 = {}
-// api.forEach(function(i) {
-//   var method = i[0],
-//     path = i[1]
-//   var r = routes3[method] || (routes3[method] = new RouteTrie())
-//   r.define(path)
-// })
-// var routes30 = {}
-// api0.forEach(function(i) {
-//   var method = 'GET',
-//     path = i[0]
-//   var r = routes30[method] || (routes30[method] = new RouteTrie())
-//   r.define(path)
-// })
+  // const r3 = routes30[method] || (routes30[method] = new RouteTrie())
+  // r3.define(path)
 
-var routes4 = {}
-api.forEach(function(i) {
-  var method = i[0],
-    path = i[1]
-  var r = routes4[method] || (routes4[method] = new Routington())
-  r.define(path)
-})
-var routes40 = {}
-api0.forEach(function(i) {
-  var method = 'GET',
-    path = i[0]
-  var r = routes40[method] || (routes40[method] = new Routington())
-  r.define(path)
-})
+  const r4 = routes40[method] || (routes40[method] = new Routington())
+  r4.define(path)
 
-var routes5 = {}
-api.forEach(function(i) {
-  var method = i[0],
-    path = i[1]
-  var r = routes5[method] || (routes5[method] = wayfarer())
-  r.on(path, () => 1)
-})
+  const r5 = routes50[method] || (routes50[method] = wayfarer())
+  r5.on(path, noop)
+}
 
-var routes50 = {}
-api0.forEach(function(i) {
-  var method = 'GET',
-    path = i[0]
-  var r = routes50[method] || (routes50[method] = wayfarer())
-  r.on(path, () => 1)
-})
-
-console.log('\nGitHub API, %s routes:', api.length)
-// add tests
-suite
-  .add('trek-router', function() {
-    api.forEach(function(i) {
-      var method = i[0],
-        path = i[1],
-        realpath = i[2]
-      var result = routes0.find(method, realpath)
-      var handler = result[0]
+console.log('==========================')
+console.log('Discourse API, %s routes', api0.length)
+console.log('==========================')
+new Benchmark.Suite()
+  .add('trek-router', () => {
+    for (const [method, , realpath] of api0) {
+      const [handler] = routes00.find(method, realpath)
       assert.notEqual(null, handler)
-    })
-  })
-  .add('path-to-regexp', function() {
-    api.forEach(function(i) {
-      var method = i[0],
-        path = i[1],
-        realpath = i[2]
-      var r = routes1[method]
-      var result = r.filter(function(j) {
-        return j.exec(realpath)
-      })[0]
-      assert.notEqual(null, result)
-    })
-  })
-  .add('route-recognizer', function() {
-    api.forEach(function(i) {
-      var method = i[0],
-        path = i[1],
-        realpath = i[2]
-      var r = routes2[method]
-      var result = r.recognize(realpath)
-      assert.notEqual(null, result)
-    })
-  })
-  // .add('route-trie', function() {
-  //   api.forEach(function(i) {
-  //     var method = i[0],
-  //       path = i[1],
-  //       realpath = i[2]
-  //     var r = routes3[method]
-  //     var result = r.match(realpath)
-  //     assert.notEqual(null, result)
-  //   })
-  // })
-  .add('routington', function() {
-    api.forEach(function(i) {
-      var method = i[0],
-        path = i[1],
-        realpath = i[2]
-      var r = routes4[method]
-      var result = r.match(realpath)
-      assert.notEqual(null, result)
-    })
-  })
-  .add('wayfarer', function() {
-    api.forEach(function(i) {
-      var method = i[0],
-        path = i[1],
-        realpath = i[2]
-      var r = routes5[method]
-      var result = r(realpath)
-      assert.notEqual(null, result)
-    })
-  })
-  // add listeners
-  .on('cycle', function(event) {
-    console.log(String(event.target))
-    console.log('memoryUsage:', process.memoryUsage())
-  })
-  .on('complete', function() {
-    console.log('Fastest is ' + _.map(this.filter('fastest'), 'name'))
-  })
-  // run async
-  .run(
-    {
-      // async: true
     }
-  )
-
-const suite0 = new Benchmark.Suite()
-
-console.log('\nDiscourse API, %s routes:', api0.length)
-// add tests
-suite0
-  .add('trek-router', function() {
-    api0.forEach(function(i) {
-      var method = 'GET',
-        path = i[0],
-        realpath = i[1]
-      var result = routes00.find(method, realpath)
-      var handler = result[0]
-      assert.notEqual(null, handler)
-    })
   })
-  .add('path-to-regexp', function() {
-    api0.forEach(function(i) {
-      var method = 'GET',
-        path = i[0],
-        realpath = i[1]
-      var r = routes10[method]
-      var result = r.filter(function(j) {
-        return j.exec(realpath)
-      })[0]
+  .add('path-to-regexp', () => {
+    for (const [method, , realpath] of api0) {
+      const r = routes10[method]
+      const [result] = r.filter((j) => j.exec(realpath))
       assert.notEqual(null, result)
-    })
+    }
   })
-  .add('route-recognizer', function() {
-    api0.forEach(function(i) {
-      var method = 'GET',
-        path = i[0],
-        realpath = i[1]
-      var r = routes20[method]
-      var result = r.recognize(realpath)
+  .add('route-recognizer', () => {
+    for (const [method, , realpath] of api0) {
+      const r = routes20[method]
+      const result = r.recognize(realpath)
       assert.notEqual(null, result)
-    })
+    }
   })
-  // .add('route-trie', function() {
-  //   api0.forEach(function(i) {
-  //     var method = 'GET',
-  //       path = i[0],
-  //       realpath = i[1]
-  //     var r = routes30[method]
-  //     var result = r.match(realpath)
+  // .add('route-trie', () => {
+  //   for (const [method, , realpath] of api0) {
+  //     const r = routes30[method]
+  //     const result = r.match(realpath)
   //     assert.notEqual(null, result)
-  //   })
+  //   }
   // })
-  .add('routington', function() {
-    api0.forEach(function(i) {
-      var method = 'GET',
-        path = i[0],
-        realpath = i[1]
-      var r = routes40[method]
-      var result = r.match(realpath)
+  .add('routington', () => {
+    for (const [method, , realpath] of api0) {
+      const r = routes40[method]
+      const result = r.match(realpath)
       assert.notEqual(null, result)
-    })
+    }
   })
-  .add('wayfarer', function() {
-    api0.forEach(function(i) {
-      var method = 'GET',
-        path = i[0],
-        realpath = i[1]
-      var r = routes50[method]
-      var result = r(realpath)
+  .add('wayfarer', () => {
+    for (const [method, , realpath] of api0) {
+      const r = routes50[method]
+      const result = r(realpath)
       assert.notEqual(null, result)
-    })
+    }
   })
-  // add listeners
-  .on('cycle', function(event) {
-    console.log(String(event.target))
+  .on('cycle', (ev) => {
+    console.log(String(ev.target))
     console.log('memoryUsage:', process.memoryUsage())
   })
-  .on('complete', function() {
-    console.log('Fastest is ' + _.map(this.filter('fastest'), 'name'))
+  .on('complete', (ev) => {
+    console.log('')
+    console.log('Fastets is', Benchmark.filter(ev.currentTarget, 'fastest')[0].name)
+    console.log('')
   })
   .run()

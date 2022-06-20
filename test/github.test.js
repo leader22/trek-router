@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import assert from 'power-assert'
-import api from './fixtures/github-api.js'
+import api from '../fixtures/github-api.js'
 import { Router } from '../index.js'
 import './node.js'
 

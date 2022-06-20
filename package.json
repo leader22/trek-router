@@ -15,7 +15,7 @@
   "module": "index.js",
   "type": "module",
   "scripts": {
-    "bench": "node benchmarks",
+    "bench": "NODE_ENV=production node benchmarks",
     "test": "mocha --reporter spec --bail --check-leaks test/**/*.test.js",
     "test-ci": "node node_modules/.bin/isparta cover node_modules/.bin/_mocha --report lcovonly --  --reporter spec --check-leaks test/**/*.test.js",
     "test-cov": "node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/**/*.test.js"

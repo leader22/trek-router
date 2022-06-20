@@ -511,4 +511,4 @@ export default [
   ['/robots.txt', '/robots.txt']
 
   // ['/*url', '/fdsfjsdakjfjdslkfjlskdjflskdjflsfj']
-]
+].map((p) => ['GET', ...p])

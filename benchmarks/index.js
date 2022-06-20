@@ -1,14 +1,17 @@
-const _ = require('lodash')
-const assert = require('assert')
-const Benchmark = require('benchmark')
-const { pathToRegexp } = require('path-to-regexp')
-const RouteRecognizer = require('route-recognizer')
-const RouteTrie = require('route-trie').default
-const Routington = require('routington')
-const wayfarer = require('wayfarer')
-const Router = require('../')
-const api = _.shuffle(require('../test/fixtures/github-api'))
-const api0 = require('../test/fixtures/discourse-api')
+import _ from 'lodash'
+import assert from 'assert'
+import Benchmark from 'benchmark'
+
+import { pathToRegexp } from 'path-to-regexp'
+import RouteRecognizer from 'route-recognizer'
+// CJS export only...
+// import RouteTrie from 'route-trie'
+import Routington from 'routington'
+import wayfarer from 'wayfarer'
+
+import { Router } from '../index.js'
+import api from '../test/fixtures/github-api.js'
+import api0 from '../test/fixtures/discourse-api.js'
 
 const suite = new Benchmark.Suite()
 
@@ -67,20 +70,20 @@ api0.forEach(function(i) {
   ])
 })
 
-var routes3 = {}
-api.forEach(function(i) {
-  var method = i[0],
-    path = i[1]
-  var r = routes3[method] || (routes3[method] = new RouteTrie())
-  r.define(path)
-})
-var routes30 = {}
-api0.forEach(function(i) {
-  var method = 'GET',
-    path = i[0]
-  var r = routes30[method] || (routes30[method] = new RouteTrie())
-  r.define(path)
-})
+// var routes3 = {}
+// api.forEach(function(i) {
+//   var method = i[0],
+//     path = i[1]
+//   var r = routes3[method] || (routes3[method] = new RouteTrie())
+//   r.define(path)
+// })
+// var routes30 = {}
+// api0.forEach(function(i) {
+//   var method = 'GET',
+//     path = i[0]
+//   var r = routes30[method] || (routes30[method] = new RouteTrie())
+//   r.define(path)
+// })
 
 var routes4 = {}
 api.forEach(function(i) {
@@ -148,16 +151,16 @@ suite
       assert.notEqual(null, result)
     })
   })
-  .add('route-trie', function() {
-    api.forEach(function(i) {
-      var method = i[0],
-        path = i[1],
-        realpath = i[2]
-      var r = routes3[method]
-      var result = r.match(realpath)
-      assert.notEqual(null, result)
-    })
-  })
+  // .add('route-trie', function() {
+  //   api.forEach(function(i) {
+  //     var method = i[0],
+  //       path = i[1],
+  //       realpath = i[2]
+  //     var r = routes3[method]
+  //     var result = r.match(realpath)
+  //     assert.notEqual(null, result)
+  //   })
+  // })
   .add('routington', function() {
     api.forEach(function(i) {
       var method = i[0],
@@ -230,16 +233,16 @@ suite0
       assert.notEqual(null, result)
     })
   })
-  .add('route-trie', function() {
-    api0.forEach(function(i) {
-      var method = 'GET',
-        path = i[0],
-        realpath = i[1]
-      var r = routes30[method]
-      var result = r.match(realpath)
-      assert.notEqual(null, result)
-    })
-  })
+  // .add('route-trie', function() {
+  //   api0.forEach(function(i) {
+  //     var method = 'GET',
+  //       path = i[0],
+  //       realpath = i[1]
+  //     var r = routes30[method]
+  //     var result = r.match(realpath)
+  //     assert.notEqual(null, result)
+  //   })
+  // })
   .add('routington', function() {
     api0.forEach(function(i) {
       var method = 'GET',

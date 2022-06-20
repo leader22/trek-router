@@ -1,12 +1,6 @@
-import _ from "lodash";
 import assert from "power-assert";
 import { Router } from "../index.js";
-import { printTree } from "./node.js";
-
-function createFunc(name) {
-  var a = `(function ${name || ""}(){})`;
-  return eval(a);
-}
+import { createFunc, shuffle, camelCase, printTree } from "./utils.js";
 
 // https://github.com/labstack/echo/issues/479
 const api = [
@@ -19,12 +13,12 @@ describe("Rest API", () => {
 
   beforeEach(() => {
     r = new Router();
-    _.shuffle(api).forEach((i) => {
+    shuffle(api).forEach((i) => {
       let [method, path] = i;
       r.add(
         method,
         path,
-        createFunc(_.camelCase("rest-api" + path + "-" + method))
+        createFunc(camelCase("rest-api" + path + "-" + method))
       );
     });
   });
@@ -34,13 +28,13 @@ describe("Rest API", () => {
     printTree(r.tree, "", true, "POST");
   });
 
-  _.shuffle(api).forEach((i) => {
+  shuffle(api).forEach((i) => {
     let [method, path, realpath, paramName] = i;
     it(path, () => {
       let [handler, params] = r.find(method, realpath);
       console.log(method, path, realpath, handler.name, params);
       assert.notEqual(null, handler);
-      assert.equal(_.camelCase("rest-api" + path + "-" + method), handler.name);
+      assert.equal(camelCase("rest-api" + path + "-" + method), handler.name);
       assert.equal((path.match(/\:/g) || []).length, params.length);
       assert.equal(params[0].name, paramName);
     });

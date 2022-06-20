@@ -1,12 +1,6 @@
-import _ from "lodash";
 import assert from "power-assert";
+import { createFunc, shuffle, camelCase } from "./utils.js";
 import { Router } from "../index.js";
-import "./node.js";
-
-function createFunc(name) {
-  var a = `(function ${name || ""}(){})`;
-  return eval(a);
-}
 
 const api = [
   ["GET", "/"],
@@ -177,19 +171,19 @@ describe("Router", () => {
   let r;
   beforeEach(() => {
     r = new Router();
-    _.shuffle(api).forEach((i) => {
+    shuffle(api).forEach((i) => {
       let [method, path] = i;
-      r.add(method, path, createFunc(_.camelCase(funcPrefx + path)));
+      r.add(method, path, createFunc(camelCase(funcPrefx + path)));
     });
   });
 
-  _.shuffle(api).forEach((i) => {
+  shuffle(api).forEach((i) => {
     let [method, path] = i;
     it(path, () => {
       let [handler, params] = r.find(method, path);
       // console.log(path, handler, params)
       assert.notEqual(null, handler);
-      assert.equal(_.camelCase(funcPrefx + path), handler.name);
+      assert.equal(camelCase(funcPrefx + path), handler.name);
       assert.equal((path.match(/\:/g) || []).length, params.length);
     });
   });

@@ -1,7 +1,7 @@
 import _ from "lodash";
 import assert from "power-assert";
 import { Router } from "../index.js";
-import { printTree } from "./node.js";
+import { printTree } from "./utils.js";
 
 describe("Issue #9", () => {
   let r;

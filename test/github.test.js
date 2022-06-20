@@ -1,8 +1,7 @@
-import _ from "lodash";
 import assert from "power-assert";
 import api from "../fixtures/github-api.js";
 import { Router } from "../index.js";
-import { printTree } from "./node.js";
+import { shuffle, camelCase, printTree } from "./utils.js";
 
 const funcPrefix = "github-api";
 
@@ -16,9 +15,9 @@ describe("GitHub API", () => {
 
   beforeEach(() => {
     r = new Router();
-    _.shuffle(api).forEach((i) => {
+    shuffle(api).forEach((i) => {
       let [method, path] = i;
-      r.add(method, path, createFunc(_.camelCase(funcPrefix + path)));
+      r.add(method, path, createFunc(camelCase(funcPrefix + path)));
     });
   });
 
@@ -26,13 +25,13 @@ describe("GitHub API", () => {
     printTree(r.tree, "", true);
   });
 
-  _.shuffle(api).forEach((i) => {
+  shuffle(api).forEach((i) => {
     let [method, path, realpath] = i;
     it(path, () => {
       let [handler, params] = r.find(method, realpath);
       // console.log(path, realpath, handler, params)
       assert.notEqual(null, handler);
-      assert.equal(_.camelCase(funcPrefix + path), handler.name);
+      assert.equal(camelCase(funcPrefix + path), handler.name);
       assert.equal((path.match(/\:/g) || []).length, params.length);
     });
   });

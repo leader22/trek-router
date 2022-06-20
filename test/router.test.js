@@ -1,15 +1,6 @@
-import _ from "lodash";
-import http from "http";
 import assert from "power-assert";
-import finalhandler from "finalhandler";
-import request from "supertest";
 import { Router, Node } from "../index.js";
-import { printTree } from "./node.js";
-
-function createFunc(name) {
-  var a = `(function ${name || ""}(){})`;
-  return eval(a);
-}
+import { createFunc, shuffle, printTree } from "./utils.js";
 
 describe("Router", () => {
   let r, result;
@@ -277,7 +268,7 @@ describe("Router", () => {
   });
 
   it("multi resources", () => {
-    _.shuffle([
+    shuffle([
       ["/users", "users"],
       ["/users/new", "newUser"],
       ["/users/:id", "user"],
@@ -402,7 +393,7 @@ describe("Router", () => {
   });
 
   it("namespace", () => {
-    _.shuffle([
+    shuffle([
       ["/admin/articles", "articles"],
       ["/admin/articles/new", "newArticle"],
       ["/admin/articles/:id", "article"],
@@ -434,7 +425,7 @@ describe("Router", () => {
   });
 
   it("nested resources", () => {
-    _.shuffle([
+    shuffle([
       ["/magazines/:mid/articles", "articles"],
       ["/magazines/:mid/articles/new", "newArticle"],
       ["/magazines/:mid/articles/:id", "article"],
@@ -533,47 +524,4 @@ describe("Router", () => {
       assert.equal(null, result[0]);
     });
   });
-
-  describe("HTTP Server", () => {
-    it("should be used for http server", (done) => {
-      r.add("GET", "/", helloWorld);
-
-      let server = createServer(r);
-
-      request(server).get("/").expect(200, "hello, world", done);
-    });
-
-    it("should return params", (done) => {
-      r.add("GET", "/:anyway", sawParams);
-
-      let server = createServer(r);
-
-      request(server)
-        .get("/233")
-        .expect(200, [{ value: "233", name: "anyway" }], done);
-    });
-  });
 });
-
-function createServer(router) {
-  return http.createServer(function onRequest(req, res) {
-    var result = router.find(req.method, req.url);
-    if (result) {
-      req.params = result[1];
-      return result[0](req, res);
-    }
-    finalhandler(req, res);
-  });
-}
-
-function helloWorld(_req, res) {
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "text/plain");
-  res.end("hello, world");
-}
-
-function sawParams(req, res) {
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "application/json");
-  res.end(JSON.stringify(req.params));
-}

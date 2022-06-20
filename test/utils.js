@@ -1,4 +1,5 @@
 import { format } from "util";
+import _ from "lodash";
 
 const prefix = (tail, p, on, off) => format("%s%s", p, tail ? on : off);
 
@@ -24,3 +25,8 @@ export const printTree = (node, pfx, tail, method = "GET") => {
     printTree(nodes[l - 1], p, true);
   }
 };
+
+export const createFunc = (name) => eval(`(function ${name || ""}(){})`);
+
+export const shuffle = _.shuffle;
+export const camelCase = _.camelCase;

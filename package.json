@@ -15,10 +15,11 @@
   "module": "index.js",
   "type": "module",
   "scripts": {
-    "bench": "NODE_ENV=production node benchmarks",
+    "bench": "NODE_ENV=production node ./benchmarks/index.js",
     "test": "mocha --reporter spec --bail --check-leaks test/**/*.test.js",
     "test-ci": "node node_modules/.bin/isparta cover node_modules/.bin/_mocha --report lcovonly --  --reporter spec --check-leaks test/**/*.test.js",
-    "test-cov": "node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/**/*.test.js"
+    "test-cov": "node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/**/*.test.js",
+    "format": "prettier --ignore-path .gitignore **/*.js -w"
   },
   "devDependencies": {
     "benchmark": "2.1.4",
@@ -28,6 +29,7 @@
     "mocha": "10.0.0",
     "path-to-regexp": "6.2.1",
     "power-assert": "1.6.1",
+    "prettier": "^2.7.1",
     "route-recognizer": "0.3.4",
     "route-trie": "3.0.0",
     "routington": "1",

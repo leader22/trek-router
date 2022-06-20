@@ -1,11 +1,11 @@
-import _ from 'lodash'
-import assert from 'power-assert'
-import { Router } from '../index.js'
-import './node.js'
+import _ from "lodash";
+import assert from "power-assert";
+import { Router } from "../index.js";
+import "./node.js";
 
 function createFunc(name) {
-  var a = `(function ${name||''}(){})`
-  return eval(a)
+  var a = `(function ${name || ""}(){})`;
+  return eval(a);
 }
 
 const api = [
@@ -169,29 +169,28 @@ const api = [
   ["GET", "/progs/timeout1.go"],
   ["GET", "/progs/timeout2.go"],
   ["GET", "/progs/update.bash"],
-]
+];
 
-let funcPrefx = 'static-api'
+let funcPrefx = "static-api";
 
-describe('Router', () => {
-  let r
+describe("Router", () => {
+  let r;
   beforeEach(() => {
-    r = new Router()
+    r = new Router();
     _.shuffle(api).forEach((i) => {
-      let [method, path] = i
-      r.add(method, path, createFunc(_.camelCase(funcPrefx + path)))
-    })
-
-  })
+      let [method, path] = i;
+      r.add(method, path, createFunc(_.camelCase(funcPrefx + path)));
+    });
+  });
 
   _.shuffle(api).forEach((i) => {
-    let [method, path] = i
+    let [method, path] = i;
     it(path, () => {
-      let [handler, params] = r.find(method, path)
+      let [handler, params] = r.find(method, path);
       // console.log(path, handler, params)
-      assert.notEqual(null, handler)
-      assert.equal(_.camelCase(funcPrefx + path), handler.name)
-      assert.equal((path.match(/\:/g) || []).length, params.length)
-    })
-  })
-})
+      assert.notEqual(null, handler);
+      assert.equal(_.camelCase(funcPrefx + path), handler.name);
+      assert.equal((path.match(/\:/g) || []).length, params.length);
+    });
+  });
+});

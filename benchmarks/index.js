@@ -10,7 +10,7 @@ import wayfarer from "wayfarer";
 import { Router } from "../index.js";
 
 import gplusApi from "../fixtures/gplus-api.js";
-import parseApi from "../fixtures/parse-api";
+import parseApi from "../fixtures/parse-api.js";
 import githubApi from "../fixtures/github-api.js";
 import discourseApi from "../fixtures/discourse-api.js";
 

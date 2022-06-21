@@ -22,34 +22,29 @@ for (const suite of [
   { name: "GitHub", api: githubApi },
   { name: "Discourse", api: discourseApi },
 ]) {
-  const routes0 = new Router();
-  const routes1 = {};
-  const routes2 = {};
-  // const routes3 = {}
-  const routes4 = {};
-  const routes5 = {};
+  const trekRoutes = new Router();
+  const pathToRegexpRoutes = {};
+  const routeRecognizerRoutes = {};
+  // const routeTrieRoutes = {}
+  const routingtonRoutes = {};
+  const wayfarerRoutes = {};
   for (const [method, path] of suite.api) {
-    routes0.add(method, path, noop);
+    trekRoutes.add(method, path, noop);
 
     const keys = [];
-    const r1 = routes1[method] || (routes1[method] = []);
+    const r1 = pathToRegexpRoutes[method] || (pathToRegexpRoutes[method] = []);
     r1.push(pathToRegexp(path, keys));
 
-    const r2 = routes2[method] || (routes2[method] = new RouteRecognizer());
-    r2.add([
-      {
-        path: path,
-        handler: noop,
-      },
-    ]);
+    const r2 = routeRecognizerRoutes[method] || (routeRecognizerRoutes[method] = new RouteRecognizer());
+    r2.add([ { path, handler: noop } ]);
 
-    // const r3 = routes3[method] || (routes3[method] = new RouteTrie())
+    // const r3 = routeTrieRoutes[method] || (routeTrieRoutes[method] = new RouteTrie())
     // r3.define(path)
 
-    const r4 = routes4[method] || (routes4[method] = new Routington());
+    const r4 = routingtonRoutes[method] || (routingtonRoutes[method] = new Routington());
     r4.define(path);
 
-    const r5 = routes5[method] || (routes5[method] = wayfarer());
+    const r5 = wayfarerRoutes[method] || (wayfarerRoutes[method] = wayfarer());
     r5.on(path, noop);
   }
 
@@ -59,41 +54,41 @@ for (const suite of [
   new Benchmark.Suite()
     .add("trek-router", () => {
       for (const [method, , realpath] of suite.api) {
-        const [handler] = routes0.find(method, realpath);
+        const [handler] = trekRoutes.find(method, realpath);
         assert.notEqual(null, handler);
       }
     })
     .add("path-to-regexp", () => {
       for (const [method, , realpath] of suite.api) {
-        const r = routes1[method];
+        const r = pathToRegexpRoutes[method];
         const [result] = r.filter((j) => j.exec(realpath));
         assert.notEqual(null, result);
       }
     })
     .add("route-recognizer", () => {
       for (const [method, , realpath] of suite.api) {
-        const r = routes2[method];
+        const r = routeRecognizerRoutes[method];
         const result = r.recognize(realpath);
         assert.notEqual(null, result);
       }
     })
     // .add('route-trie', () => {
     //   for (const [method, , realpath] of suite.api) {
-    //     const r = routes3[method]
+    //     const r = routeTrieRoutes[method]
     //     const result = r.match(realpath)
     //     assert.notEqual(null, result)
     //   }
     // })
     .add("routington", () => {
       for (const [method, , realpath] of suite.api) {
-        const r = routes4[method];
+        const r = routingtonRoutes[method];
         const result = r.match(realpath);
         assert.notEqual(null, result);
       }
     })
     .add("wayfarer", () => {
       for (const [method, , realpath] of suite.api) {
-        const r = routes5[method];
+        const r = wayfarerRoutes[method];
         const result = r(realpath);
         assert.notEqual(null, result);
       }

@@ -60,7 +60,7 @@ for (const suite of [
     })
     .add("trek-router", () => {
       for (const [method, , realpath] of suite.api) {
-        const [handler] = trekRoutes.find(method, realpath);
+        const [handler] = trekRoutes.match(method, realpath);
         assert.notEqual(null, handler);
       }
     })

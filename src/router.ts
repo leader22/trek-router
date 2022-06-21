@@ -3,12 +3,14 @@ import { Node } from "./node";
 // Static Param Any `*` `/` `:`
 const [SKIND, PKIND, AKIND, STAR, SLASH, COLON] = [0, 1, 2, 42, 47, 58];
 
-export class Router {
+export class Router<T> {
+  tree: Node<T>;
+
   constructor() {
     this.tree = new Node();
   }
 
-  add(method, path, handler) {
+  add(method: string, path: string, handler: T) {
     // Pnames: Param names
     let [i, l, pnames, ch, j] = [0, path.length, []];
 
@@ -42,7 +44,13 @@ export class Router {
     this.insert(method, path, SKIND, pnames, handler);
   }
 
-  insert(method, path, t, pnames, handler) {
+  private insert(
+    method: string,
+    path: string,
+    t?: number,
+    pnames?: string[],
+    handler?: T
+  ) {
     // Current node as root
     let [cn, prefix, sl, pl, l, max, n, c] = [this.tree];
 
@@ -109,7 +117,17 @@ export class Router {
     }
   }
 
-  find(method, path, cn, n = 0, result = [undefined, []]) {
+  match(method: string, path: string) {
+    return this.find(method, path);
+  }
+
+  private find(
+    method: string,
+    path: string,
+    cn?: Node<T>,
+    n: number = 0,
+    result: [any, any[]] = [undefined, []]
+  ) {
     cn = cn || this.tree; // Current node as root
     const sl = path.length;
     const prefix = cn.prefix;

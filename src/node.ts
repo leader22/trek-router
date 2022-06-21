@@ -5,7 +5,13 @@ type Handler<HandleFunc> = {
   pnames?: string[];
 };
 
-export class Node {
+export class Node<T> {
+  label: number;
+  prefix: string;
+  children: Node<T>[];
+  kind: number;
+  map: Record<string, Handler<T>>;
+
   constructor(
     prefix = "/",
     children = [],
@@ -19,42 +25,49 @@ export class Node {
     this.map = map;
   }
 
-  addChild(n) {
+  addChild(n: Node<T>) {
     this.children.push(n);
   }
 
-  findChild(c, t, l, e, i = 0) {
-    for (l = this.children.length; i < l; i++) {
-      e = this.children[i];
+  findChild(c: number, t: number) {
+    const l = this.children.length;
+    for (let i = 0; i < l; i++) {
+      const e = this.children[i];
       if (c === e.label && t === e.kind) {
         return e;
       }
     }
   }
 
-  findChildWithLabel(c, l, e, i = 0) {
-    for (l = this.children.length; i < l; i++) {
-      e = this.children[i];
+  findChildWithLabel(c: number) {
+    const l = this.children.length;
+    for (let i = 0; i < l; i++) {
+      const e = this.children[i];
       if (c === e.label) {
         return e;
       }
     }
   }
 
-  findChildByKind(t, l, e, i = 0) {
-    for (l = this.children.length; i < l; i++) {
-      e = this.children[i];
+  findChildByKind(t: number) {
+    const l = this.children.length;
+    for (let i = 0; i < l; i++) {
+      const e = this.children[i];
       if (t === e.kind) {
         return e;
       }
     }
   }
 
-  addHandler(method, handler, pnames) {
+  addHandler(
+    method: string,
+    handler?: Handler<T>["handler"],
+    pnames?: Handler<T>["pnames"]
+  ) {
     this.map[method] = { handler, pnames };
   }
 
-  findHandler(method) {
+  findHandler(method: string) {
     return this.map[method];
   }
 }

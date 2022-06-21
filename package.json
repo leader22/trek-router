@@ -22,7 +22,7 @@
     "bench": "NODE_ENV=production node ./benchmarks/index.js",
     "test": "mocha --bail --check-leaks test/**/*.test.js",
     "format": "prettier --ignore-path .gitignore **/*.js **/*.ts -w",
-    "build": "esbuild ./src/index.ts --bundle --format=esm > index.mjs"
+    "build": "esbuild ./src/index.ts --bundle --minify --format=esm > index.mjs"
   },
   "devDependencies": {
     "benchmark": "2.1.4",

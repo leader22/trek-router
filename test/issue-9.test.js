@@ -1,6 +1,6 @@
 import _ from "lodash";
 import assert from "power-assert";
-import { Router } from "../index.js";
+import { Router } from "../index.mjs";
 import { printTree } from "./utils.js";
 
 describe("Issue #9", () => {

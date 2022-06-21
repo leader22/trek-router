@@ -1,6 +1,6 @@
 import assert from "power-assert";
 import api from "../fixtures/gplus-api.js";
-import { Router } from "../index.js";
+import { Router } from "../index.mjs";
 import { createFunc, shuffle, camelCase, printTree } from "./utils.js";
 
 const funcPrefix = "gplus-api";

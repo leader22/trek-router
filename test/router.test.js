@@ -1,5 +1,5 @@
 import assert from "power-assert";
-import { Router, Node } from "../index.js";
+import { Router, Node } from "../index.mjs";
 import { createFunc, shuffle, printTree } from "./utils.js";
 
 describe("Router", () => {

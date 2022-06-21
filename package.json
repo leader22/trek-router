@@ -11,16 +11,22 @@
     "trek",
     "trek-router"
   ],
-  "main": "index.js",
-  "module": "index.js",
+  "module": "index.mjs",
   "type": "module",
+  "exports": {
+    ".": {
+      "import": "./index.mjs"
+    }
+  },
   "scripts": {
     "bench": "NODE_ENV=production node ./benchmarks/index.js",
     "test": "mocha --bail --check-leaks test/**/*.test.js",
-    "format": "prettier --ignore-path .gitignore **/*.js -w"
+    "format": "prettier --ignore-path .gitignore **/*.js **/*.ts -w",
+    "build": "esbuild ./src/index.ts --bundle --format=esm > index.mjs"
   },
   "devDependencies": {
     "benchmark": "2.1.4",
+    "esbuild": "^0.14.47",
     "finalhandler": "1.2.0",
     "lodash": "4",
     "mocha": "10.0.0",
@@ -28,9 +34,9 @@
     "power-assert": "1.6.1",
     "prettier": "^2.7.1",
     "route-recognizer": "0.3.4",
-    "route-trie": "3.0.0",
     "routington": "1",
     "supertest": "6",
+    "typescript": "^4.7.4",
     "wayfarer": "7.0.1"
   },
   "engines": {

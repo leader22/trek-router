@@ -1,6 +1,6 @@
 import assert from "power-assert";
 import { createFunc, shuffle, camelCase } from "./utils.js";
-import { Router } from "../index.js";
+import { Router } from "../index.mjs";
 
 const api = [
   ["GET", "/"],

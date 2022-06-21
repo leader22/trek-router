@@ -1,7 +1,7 @@
 import http from "http";
 import finalhandler from "finalhandler";
 import request from "supertest";
-import { Router } from "../index.js";
+import { Router } from "../index.mjs";
 
 const createServer = (router) =>
   http.createServer((req, res) => {

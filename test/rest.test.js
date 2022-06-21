@@ -1,5 +1,5 @@
 import assert from "power-assert";
-import { Router } from "../index.js";
+import { Router } from "../index.mjs";
 import { createFunc, shuffle, camelCase, printTree } from "./utils.js";
 
 // https://github.com/labstack/echo/issues/479

@@ -1,8 +1,8 @@
 {
   "name": "trek-router",
-  "version": "1.2.0",
+  "version": "1.0.0",
   "description": "A fast HTTP router",
-  "repository": "trekjs/router",
+  "repository": "",
   "license": "MIT",
   "keywords": [
     "route",
@@ -12,6 +12,7 @@
     "trek-router"
   ],
   "module": "index.mjs",
+  "types": "index.d.ts",
   "type": "module",
   "exports": {
     ".": {
@@ -21,12 +22,10 @@
   "scripts": {
     "bench": "NODE_ENV=production node ./benchmarks/index.js",
     "test": "mocha --bail --check-leaks test/**/*.test.js",
-    "format": "prettier --ignore-path .gitignore **/*.js **/*.ts -w",
-    "build": "esbuild ./src/index.ts --bundle --minify --format=esm > index.mjs"
+    "format": "prettier --ignore-path .gitignore **/*.js -w"
   },
   "devDependencies": {
     "benchmark": "2.1.4",
-    "esbuild": "^0.14.47",
     "finalhandler": "1.2.0",
     "lodash": "4",
     "mocha": "10.0.0",
@@ -36,7 +35,6 @@
     "route-recognizer": "0.3.4",
     "routington": "1",
     "supertest": "6",
-    "typescript": "^4.7.4",
     "wayfarer": "7.0.1"
   },
   "engines": {
@@ -45,6 +43,6 @@
   "files": [
     "HISTORY.md",
     "LICENSE",
-    "index.js"
+    "index.mjs"
   ]
 }

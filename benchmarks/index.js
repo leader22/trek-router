@@ -51,7 +51,7 @@ for (const suite of [
   new Benchmark.Suite()
     .add("trek-router", () => {
       for (const [method, , realpath] of suite.api) {
-        const [handler] = trekRoutes.match(method, realpath);
+        const [handler] = trekRoutes.find(method, realpath);
         assert.notEqual(null, handler);
       }
     })
